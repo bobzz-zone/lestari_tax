@@ -64,6 +64,14 @@ class UpdateBundleStock(Document):
         self.kadar = ""
         self.category = ""
         self.bruto = ""
+    # @frappe.whitelist()
+    # def cek_new(self):
+    #     cek = frappe.db.sql_list("""
+    #             SELECT * FROM `tabUpdate Bundle Stock 
+    #             WHERE bundle = '{}' and docstatus != 2
+    #         """.format(self.bundle))
+    #     frappe.msgprint(str(cek))
+    #     return cek
     @frappe.whitelist()
     def get_bundle_sales(self):
         bundle = frappe.db.get_list("Close Bundle Stock")
@@ -73,7 +81,7 @@ class UpdateBundleStock(Document):
 @frappe.whitelist()
 def get_sub_item(kadar, sub_kategori):
     item_code = frappe.db.sql("""
-                              SELECT item_code, gold_selling_item FROM `tabItem` WHERE kadar = "{}" and item_group = "Pembayaran" and item_code LIKE "{}%" LIMIT 1
+                              SELECT item_code, gold_selling_item FROM `tabItem` WHERE kadar = "{}" and item_code LIKE "{}%" LIMIT 1
                               """.format(kadar,sub_kategori))
     # frappe.msgprint(item_code)
     return item_code

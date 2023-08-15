@@ -15,7 +15,6 @@ const baud = 9800;
 
 async function connectSerial() {
   try {
-	// console.log("Connected");
 	connected = 1;
 	cur_frm.set_value("status_timbangan","Connected")
 	cur_frm.refresh_field("status_timbangan");
@@ -26,7 +25,6 @@ async function connectSerial() {
     writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
 
     writer = textEncoder.writable.getWriter();
-	// await writer.write("S"+"\r\n");
 	if(timbangan == null){
 		timbangan = 1;
 	}
@@ -36,7 +34,6 @@ async function connectSerial() {
 	  }, 2500);
 	}
   } catch {
-    // alert("Serial Connection Failed");
   }
 }
 async function listenToPort() {
@@ -48,8 +45,6 @@ async function listenToPort() {
     if (done) {
       break;
     }
-
-    // console.log("value:" + value);
     appendToTerminal(value);
   }
 }
@@ -66,8 +61,6 @@ async function sendSerialLine() {
 }
 
 async function appendToTerminal(newStuff) {
-//   console.log("Timbangan"+timbangan)
-//   console.log("newStuff"+newStuff)
   if (newStuff == "E01" || newStuff == "E" || newStuff == "01" && type_timbangan == "AND"){
 	timbangan = 0;
 	type_timbangan = "SHINKO";
@@ -131,80 +124,19 @@ async function appendToTerminal(newStuff) {
 	let result = newStuff.includes("G S");
 	if (result) {
 		newStuff = newStuff.replace("G S", "");
-		// cur_frm.set_value("berat", newStuff);
-		// cur_frm.refresh_field("berat");
 	}
 	cur_frm.set_value("berat", newStuff);
 	cur_frm.refresh_field("berat");
 	$(".berat_real").text(cur_frm.doc.berat);
   }
 }
-/////////////////////////////////////////////////////////
-// 	if (timbangan == 1){
-// 	const text = newStuff;
-// 	const pattern = /ST,\+0*([0-9]+\.[0-9]+)[A-Za-z]*/g;
-// 	const matches = text.match(pattern);
-// 	const angka = matches[0].match(/[0-9]+\.[0-9]+/)[0];
-// 	}else{
-// 		newStuff = newStuff.replace(/[A-Z]|[a-z]/g, "").trim(); //timbangan suncho dan metler yang bener
-//   		angka = parseFloat(newStuff)
-// 	}
-// 	console.log(parseFloat(angka)); // Output: 17.66
-// 	if (angka != null){
-// 		timbangan = 0
-// 	}
-// 	cur_frm.set_value("berat", angka);
-// 	cur_frm.refresh_field("berat");
-// }
-// async function appendToTerminal(newStuff, data) {
-//   var myVariable = newStuff
-//   if (/^ST,/.test(myVariable)) {
-// 	console.log("Variabel dimulai dengan 'ST,'");
-//   }
-//   if (/^S S.*g$/.test(myVariable)) {
-// 	console.log("Variabel dimulai dengan 'S S' dan diakhiri dengan 'g'");
-//   }
-//   if (/.*G S$/.test(myVariable)) {
-// 	console.log("Variabel diakhiri dengan 'G S'");
-//   }
-  
-  // newStuff = newStuff.match(/[0-9]*[.]*[0-9]+\w/g);
-  // newStuff = newStuff.match(/([0-9]*[.])\w+/s);
-  // cur_frm.set_value("berat", flt(newStuff));
-  // const valueString = new TextDecoder().decode(value);
-  // const filteredValue = newStuff.match(/[-+]?0*(\.\d+)/g).map(x => x.replace(/^[-+]?0*([^0]+)/g, "$1")).join('');
-  //   newStuff = newStuff.replace(/ST,\+0*([0-9]+\.[0-9]+)[A-Za-z]*/g, "").trim(); //timbangan suncho dan metler 
-  //   let formattedValue = newStuff.replace(".", ",");
-
-//   newStuff = newStuff.replace(/[A-Z]|[a-z]/g, "").trim(); //timbangan suncho dan metler yang bener
-//   newStuff = parseFloat(newStuff)
-
-	//and
-	// const text = newStuff;
-	// const pattern = /ST,\+0*([0-9]+\.[0-9]+)[A-Za-z]*/g;
-	// const matches = text.match(pattern);
-
-	// // if (matches) {
-	// const angka = matches[0].match(/[0-9]+\.[0-9]+/)[0];
-	// console.log(parseFloat(angka)); // Output: 17.66
-	// cur_frm.set_value("berat", angka);
-
-	// frappe.model.set_value(data.doctype, data.name, 'qty_penambahan', angka);
-
-	// cur_frm.refresh();
-
-	// }
-  // newStuff = newStuff.replace(/[^\d.]/g, "").trim(); //timbangan AND
-// }
 
 function hitung(){
 	var totalberat = 0,
   	totaltransfer = 0;
 	$.each(cur_frm.doc.items, function(i,e){
-		// console.log(e.qty_penambahan)
 		if(e.qty_penambahan != null){
 		totalberat = parseFloat(totalberat) + parseFloat(e.qty_penambahan)
-		// console.log(totalberat)
 		}
 	})
 	cur_frm.set_value("total_bruto", totalberat)
@@ -227,7 +159,6 @@ function hitung(){
 				var child = cur_frm.add_child('per_kadar');
 				child.kadar = kadar;
 				child.bruto = total_berat;
-				// console.log(total_berat);
 			}
 			cur_frm.refresh_field('per_kadar');
 }
@@ -239,10 +170,6 @@ frappe.ui.form.on('Update Bundle Stock', {
 	validate: function(frm){
 		frm.events.get_disconnect(frm)
 	},
-	// before_submit: function(frm){
-	// 	cur_frm.set_value('status','Submitted')
-	// 	frm.refresh();
-	// },
 	refresh: function(frm) {	
 		cur_frm.dashboard.refresh();
 		const hasil_timbang = `
@@ -255,11 +182,8 @@ frappe.ui.form.on('Update Bundle Stock', {
 	
 		cur_frm.toolbar.page.add_inner_message(hasil_timbang);
 		cur_frm.get_field("bundle").set_focus()
-		// if( connected == 0){
 		frm.add_custom_button(__("Connect"), () => frm.events.get_connect(frm));
-		// }else{
-		// frm.add_custom_button(__("Disconnect"), () => frm.events.get_disconnect(frm));
-		// }
+		// frm.add_custom_button(__("Buat Baru"), () => frm.events.get_connect(frm));
 		if (cur_frm.is_new()){
 			frappe.db.get_value("Employee", { "user_id": frappe.session.user }, ["name","id_employee"]).then(function (responseJSON) {
 				cur_frm.set_value("pic", responseJSON.message.name);
@@ -267,7 +191,6 @@ frappe.ui.form.on('Update Bundle Stock', {
 				cur_frm.get_field("bundle").set_focus()
 				cur_frm.refresh_field("pic");
 				cur_frm.refresh_field("id_employee");
-			//   console.log(responseJSON)
 			});
 		}		
 		frm.set_query("pic", function(){
@@ -277,26 +200,10 @@ frappe.ui.form.on('Update Bundle Stock', {
 				]
 			}
 		});
-		// frm.set_query("sub_kategori","items", function(){
-		// 	return {
-		// 		"filters": [
-		// 			["Item Group", "parent_item_group", "=", "Products"],
-		// 		]
-		// 	}
-		// });
-		frappe.db.get_list('Item Group', {
-			filters: {
-				parent_item_group: 'Products'
-			}
-		}).then(records => {
-			for(var i = 0; i < records.length; i++){
-				list_kat.push(records[i].name)
-			}
-		})
 		frm.set_query("sub_kategori", "items", function () {
 			return {
 				"filters": [
-					["Item Group", "parent_item_group", "in", list_kat],
+					["Item Group", "name", "=", "Perhiasan"],
 				]
 			};
 		  });
@@ -318,12 +225,10 @@ frappe.ui.form.on('Update Bundle Stock', {
 		cur_frm.set_value("status_timbangan","Not Connect")
 	},
 	get_connect: function(frm){
-		// frappe.msgprint("Connect");
 		window.checkPort = async function (fromWorker) {
 			if ("serial" in navigator) {
 			  var ports = await navigator.serial.getPorts();
 			  if (ports.length == 0 || fromWorker) {
-				// console.log("Not Connected");
 				cur_frm.set_value("status_timbangan","Not Connect")
 				cur_frm.refresh_field("status_timbangan");
 				frappe.confirm(
@@ -338,13 +243,13 @@ frappe.ui.form.on('Update Bundle Stock', {
 			  } else {
 				port = ports[0];
 				connectSerial();
-				// console.log("Connected");
 				cur_frm.set_value("status_timbangan","Connected")
 				cur_frm.refresh_field("status_timbangan");
 				// Prompt user to select any serial port.
 			  }
 			} else {
-			  frappe.msgprint("Your browser does not support serial device connection. Please switch to a supported browser to connect to your weigh device");
+			//   frappe.msgprint("Your browser does not support serial device connection. Please switch to a supported browser to connect to your weigh device");
+			  console.log("Your browser does not support serial device connection. Please switch to a supported browser to connect to your weigh device");
 			}
 		  }
 		  window.checkPort(false);
@@ -358,6 +263,22 @@ frappe.ui.form.on('Update Bundle Stock', {
 			cur_frm.refresh_field("pic");
 	})
 	},
+	bundle: async function(frm){
+		await frappe.db.count('Update Bundle Stock', { bundle: cur_frm.doc.bundle, docstatus:['!=',2] })
+			.then(count => {
+				if(count > 0){
+					console.log(count)
+					frm.set_df_property('type','options',['Add Stock','Deduct Stock'])
+					frm.refresh()
+				}else{
+					console.log('as')
+					cur_frm.set_df_property('type','options',['New Stock'])
+					cur_frm.set_value('type','New Stock')
+					cur_frm.set_df_property('type','read_only',1)
+					cur_frm.refresh_field('type')
+				}
+			})
+	},
 	type: function(frm){
 		// cur_frm.fields_dic['items'].grid.get_field("sub_kategori").set_focus()
 	}
@@ -366,43 +287,30 @@ frappe.ui.form.on('Update Bundle Stock', {
 frappe.ui.form.on('Detail Penambahan Stock', {
 	items_add: function (frm, cdt, cdn){
 		var d = locals[cdt][cdn];
-        var idx = d.idx;
-        var prev_kadar = 0;
+        var prev_kadar, prev_sub_kategori,prev_kategori,prev_kadar,prev_item,prev_gold_selling_item;
 		$.each(frm.doc.items, function(i,g){
 			if(g.kadar != null){
 				prev_kadar = g.kadar;
+				prev_sub_kategori = g.sub_kategori;
+				prev_kategori = g.kategori;
+				prev_item = g.item;
+				prev_gold_selling_item = g.gold_selling_item;
 			}else{
 				g.kadar = prev_kadar
+				g.sub_kategori = prev_sub_kategori
+				g.kategori = prev_kategori
+				g.item = prev_item
+				g.gold_selling_item = prev_gold_selling_item
 			}
-			// cur_frm.get_field('items').grid.get_row(g.name).columns_list[3].df.read_only = 1;
 			cur_frm.refresh_field("item")
 		})
-        // if (idx > 1) {
-        //     var prev_child = locals[cdt][idx - 1];
-		// 	console.log(prev_child)
-        //     prev_kadar = prev_child.kadar;
-        // }
-        // frappe.model.set_value(cdt, cdn, 'kadar', prev_kadar);
 		d.kadar = prev_kadar
         cur_frm.refresh_field('items');
-		hitung()
-		// hitung(frm, cdt, cdn)
-		if(cur_frm.doc.status_timbangan == "Connected"){
-		// 	d.set_df_property("qty_penambahan","read_only",1)
-		}else{
-		// 	d.set_df_property("qty_penambahan","read_only",0)
-		// var df = frappe.meta.get_docfield("Attribute Shopee","qty_penambahan", cur_frm.doc.items[d.idx]['parent']);
-		// df.read_only = 1;
-		// cur_frm.refresh_fields('items');
-		}
+		hitung()		
 	},
 	items_remove: function(frm,cdt,cdn){
 		hitung()
 	},
-	// item: function(frm,cdt,cdn){
-	// 	var d = locals[cdt][cdn];	
-	// 	frappe.msgprint(d.idx)
-	// },
 	sub_kategori: function (doc,cdt, cdn){
 		var d = locals[cdt][cdn];
 		if(d.kadar != null){
@@ -424,8 +332,6 @@ frappe.ui.form.on('Detail Penambahan Stock', {
 	}, 
 	kadar: function (doc,cdt, cdn){
 		var d = locals[cdt][cdn];
-		// console.log(cdt)
-		// console.log(cdn)
 		frappe.model.set_value(cdt, cdn, 'qty_penambahan', "read_only", true);
 		if(d.sub_kategori != null){
 		frappe.call({
@@ -439,7 +345,6 @@ frappe.ui.form.on('Detail Penambahan Stock', {
 					d.item = r.message[0][0]
 					d.gold_selling_item = r.message[0][1]
 					cur_frm.doc.id_row = d.idx
-					// cur_frm.get_field('items').grid.get_row(cdn).columns_list[3].df.read_only = 1;
 					cur_frm.doc.field_row = "qty_penambahan"
 					cur_frm.refresh_field("id_row")
 					cur_frm.refresh_field("field_row")
@@ -454,8 +359,6 @@ frappe.ui.form.on('Detail Penambahan Stock', {
 		hitung();
 	},
 	timbang: async function(frm,cdt,cdn){
-		// sendSerialLine(setQtyPenambahan(frm,cdt,cdn))
-		// await sendSerialLine(locals[cdt][cdn])
 		frappe.model.set_value(cdt, cdn, 'qty_penambahan', cur_frm.doc.berat);
 		cur_frm.refresh_field("items")
 	}

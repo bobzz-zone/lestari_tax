@@ -46,6 +46,9 @@
   "pph",
   "total_pajak",
   "sisa_pajak",
+  "column_break_40",
+  "total_sebelum_pajak",
+  "total_setelah_pajak",
   "sb_bill",
   "total_bruto",
   "cash_back",
@@ -205,8 +208,10 @@
    "options": "Gold Invoice Advance IDR"
   },
   {
+   "default": "0",
    "fieldname": "total_advance",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "Total Advances",
    "no_copy": 1,
    "precision": "3",
@@ -304,6 +309,7 @@
   {
    "fieldname": "summary_sec",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Summary"
   },
   {
@@ -359,18 +365,21 @@
    "fetch_from": "enduser.parent_customer",
    "fieldname": "subcustomer",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "SubCustomer",
    "options": "Customer"
   },
   {
    "fieldname": "enduser",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "End User",
    "options": "Customer"
   },
   {
    "fieldname": "total_print",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "Total Print",
    "precision": "3"
   },
@@ -391,6 +400,7 @@
   {
    "fieldname": "cash_back",
    "fieldtype": "Currency",
+   "hidden": 1,
    "label": "Cash Back",
    "precision": "3"
   },
@@ -402,18 +412,18 @@
   {
    "fieldname": "ppn",
    "fieldtype": "Currency",
-   "label": "PPN",
-   "read_only": 1
+   "label": "PPN"
   },
   {
    "fieldname": "pph",
    "fieldtype": "Currency",
-   "label": "PPH",
-   "read_only": 1
+   "label": "PPH"
   },
   {
+   "default": "Tax",
    "fieldname": "tax_status",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Tax Status",
    "options": "Non Tax\nTax"
   },
@@ -435,15 +445,19 @@
    "label": "Non PPH"
   },
   {
+   "default": "LD",
    "fieldname": "type_emas",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Satuan",
-   "options": "Basic Nilai Tukar Emas"
+   "options": "Basic Nilai Tukar Emas",
+   "read_only": 1
   },
   {
    "fetch_from": "type_emas.piutang_emas",
    "fieldname": "piutang_gold",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Account",
    "options": "Account",
    "read_only": 1
@@ -464,6 +478,7 @@
    "default": "0",
    "fieldname": "is_titipan",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Merupakan titipan"
   },
   {
@@ -471,11 +486,27 @@
    "fieldname": "tanggal_titip",
    "fieldtype": "Date",
    "label": "Tanggal Titip"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_sebelum_pajak",
+   "fieldtype": "Currency",
+   "label": "Total Sebelum Pajak"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_setelah_pajak",
+   "fieldtype": "Currency",
+   "label": "Total Setelah Pajak"
+  },
+  {
+   "fieldname": "column_break_40",
+   "fieldtype": "Column Break"
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2023-07-11 13:33:31.827041",
+ "modified": "2023-08-11 15:36:53.480233",
  "modified_by": "Administrator",
  "module": "Gold Selling",
  "name": "Gold Invoice",
